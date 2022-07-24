@@ -20,6 +20,7 @@ outputsheet_month = ["JAN 22", "FEB 22", "MAR 22", "APR 22", "MAY 22", "JUN 22",
 full_month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]     # Array of full months to paste onto output template.
 
 
+
 """
 Looping through Folder
 """
