@@ -14,7 +14,7 @@ import glob
 """
 Initializations
 """
-directory = r"C:\Users\ryana\Desktop\FolderForCode"
+directory = r"C:\Users\ryana\Desktop\FolderForCode\EXCEL_FILES"
 timesheet_month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]  # Array of months for input file specification.
 outputsheet_month = ["JAN 22", "FEB 22", "MAR 22", "APR 22", "MAY 22", "JUN 22", "JUL 22", "AUG 22", "SEP 22", "OCT 22", "NOV 22", "DEC 22"]    # Array of months for ouput file specification.
 full_month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]     # Array of full months to paste onto output template.
@@ -27,9 +27,9 @@ Looping through Folder
 name = input("Name: ")
 for filename in os.listdir(directory):
     if filename.endswith(".xlsx"):
-        timesheet_wb = load_workbook(f"TS-2022_{name}.xlsx")   # loading excel book
+        timesheet_wb = load_workbook(f"./EXCEL_FILES/TS-2022_{name}.xlsx")   # loading excel book
         ws = timesheet_wb.active   # loading excel sheet
-        output_file = f"OT_template{name}.xlsx"    # saving the output file name for later
+        output_file = f"./EXCEL_FILES/OT_template{name}.xlsx"    # saving the output file name for later
         output_workbook = load_workbook(output_file)   # loading in the output file
         break
 
@@ -72,19 +72,31 @@ while x < len(timesheet_month):
     x += 1
 
 
+def calendarCopy(i, y):
+    output_ws = output_workbook[outputsheet_month[y]]
+    Cal_list = []
+    for day in range(1, i):
+        dayString = str(day)
+        calendar = (str(full_month[y]) + " " + dayString + ", 2022")
+        Cal_list.append(calendar)
+        write_row(output_ws, 12, 1, Cal_list)
+
+
 """
 This third portion is to now write the data to an existing excel file. It will be easiest to write it to a template document
 rather than creating a new document and formatting it from start
 """
 y = 0
 while y < len(full_month):
-    output_ws = output_workbook[outputsheet_month[y]]
-    Cal_list = []
-    for day in range(1, 32):
-        dayString = str(day)
-        calendar = (str(full_month[y]) + " " + dayString + ", 2022")
-        Cal_list.append(calendar)
-        write_row(output_ws, 12, 1, Cal_list)   
+    if y == 1:
+        calendarCopy(29, y)
+    elif y % 2 == 1 and y < 7:
+        calendarCopy(31, y)
+    elif y % 2 == 0 and y >= 7:
+        calendarCopy(31, y)
+    else:
+        calendarCopy(32, y)
     y += 1
+
 
 output_workbook.save(output_file)
