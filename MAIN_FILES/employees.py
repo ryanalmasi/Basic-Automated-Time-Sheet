@@ -1,4 +1,4 @@
-employees = [
+employee_list = [
     "RyanAlmasi",
     "AbhroChowdhury"
 ]

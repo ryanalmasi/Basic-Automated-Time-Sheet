@@ -1,6 +1,6 @@
 # imports 
 import os
-from employees import employees
+from employees import employee_list
 from pathlib import Path
 from re import T
 from tkinter import END, Y
@@ -65,8 +65,8 @@ def calendarCopy(i, y):
 MAIN SCRIPT
 """
 z = 0
-while z < len(employees):
-    name = employees[z]
+while z < len(employee_list):
+    name = employee_list[z]
     for filename in os.listdir(excel_directory):
         if filename.endswith(".xlsx"):
             timesheet_wb = load_workbook(f"./EXCEL_FILES/TS-2022_{name}.xlsx")   # loading excel book
@@ -75,31 +75,30 @@ while z < len(employees):
             output_workbook = load_workbook(output_file)   # loading in the output file
             break
 
-        # To loop over initial input excel document in order to copy necessary data and paste onto template sheet.
-        x = 0
-        while x < len(timesheet_month):
-            output_ws = output_workbook[outputsheet_month[x]]
-            month = timesheet_wb[timesheet_month[x]]
-            OTlist = []
-            for d in range(1, 31):
-                OTdata = OTperday(4 + d*2)
-                OTlist.append(OTdata)
-                write_row(output_ws, 12, 2, OTlist)
-            x += 1
+    # To loop over initial input excel document in order to copy necessary data and paste onto template sheet.
+    x = 0
+    while x < len(timesheet_month):
+        output_ws = output_workbook[outputsheet_month[x]]
+        month = timesheet_wb[timesheet_month[x]]
+        OTlist = []
+        for d in range(1, 31):
+            OTdata = OTperday(4 + d*2)
+            OTlist.append(OTdata)
+            write_row(output_ws, 12, 2, OTlist)
+        x += 1
 
-
-        # To fill in excel sheet with 
-        y = 0
-        while y < len(full_month):
-            if y == 1:
-                calendarCopy(29, y)
-            elif y % 2 == 1 and y < 7:
-                calendarCopy(31, y)
-            elif y % 2 == 0 and y >= 7:
-                calendarCopy(31, y)
-            else:
-                calendarCopy(32, y)
-            y += 1
+    # To fill in excel sheet with 
+    y = 0
+    while y < len(full_month):
+        if y == 1:
+            calendarCopy(29, y)
+        elif y % 2 == 1 and y < 7:
+            calendarCopy(31, y)
+        elif y % 2 == 0 and y >= 7:
+            calendarCopy(31, y)
+        else:
+            calendarCopy(32, y)
+        y += 1
+    
+    output_workbook.save(output_file)
     z += 1
-
-output_workbook.save(output_file)
